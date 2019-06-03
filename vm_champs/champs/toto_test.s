@@ -3,7 +3,7 @@
 # l'annee derniere
 #     VOALA
 #
-.name			"Celebration Funebre v0.99pl42" 99
+.name			"Celebration Funebre v0.99pl42"
 .comment 	"Jour Js"
 
 		ld   %0,r3		

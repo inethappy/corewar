@@ -60,12 +60,20 @@ void parse_string_save_data(char *line, t_all *champ)
 
 	str = ft_strsplit_new(line);
 	if (!str || (!ft_strequ(str[0], ".name") && !ft_strequ(str[0], ".comment")))
-		p_error("\nERROR! Invalid command.");
+		p_error("\nERROR! Invalid command.\n");
 	// printf("TUT %s\n", str[1]);
 	if (ft_strequ(str[0], ".name"))
+	{
+		if (champ->name)
+			p_error("\nERROR! Invalid command.\n");
 		champ->name = save_command_data(line, 5);
+	}
 	else
+	{
+		if (champ->comment)
+			p_error("\nERROR! Invalid command.\n");
 		champ->comment = save_command_data(line, 8);
+	}
 	del_arr(str);
 }
 
@@ -92,7 +100,6 @@ char *save_command_data(char *line, int index)
 	str = ft_strnew(i - index + 1);
 	ft_strncpy(str, (line + (index + 1)), ((i - 1) - index));
 	// printf("str =  %s\n", str);
-
 	return (str);
 }
 

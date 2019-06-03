@@ -8,9 +8,9 @@
 typedef struct  s_all
 {
     char    *file_name;
-    char *name;
-    char *comment;
-    int fd;
+    char    *name;
+    char    *comment;
+    // int fd;
 }               t_all;
 
 typedef struct  s_op
@@ -37,5 +37,7 @@ char            **ft_strsplit_new(char const *s);
 char            *ft_one_word_new(const char *s, int *i);
 int             ft_words_counter_new(const char *s);
 
+// save file
+void            save_inctructions(int fd,t_all *champ);
 
 #endif
