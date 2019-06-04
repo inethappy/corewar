@@ -8,7 +8,8 @@ LIB_DIR		:= ../lib/
 SOURCES		:=	main.c \
 				split_string_with_space_and_tabs.c \
 				op.c \
-				save_name.c
+				save_name.c \
+				init_name.c
 				
 
 OBJECTS		:= $(addprefix $(OBJECTS_DIR), $(SOURCES:.c=.o))

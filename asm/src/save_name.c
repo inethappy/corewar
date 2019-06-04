@@ -9,18 +9,16 @@ void save_name(char *name, int fd, t_all *champ)
 	while (get_next_line(fd, &line))
 	{
 		if (line[0] == '.')
-			parse_string_save_data(line, champ);
+			check_name_comment(line, champ);
 		if (!ft_strchr(line, '"') && line[0] != '#' && line[0] != ';')
 			break ;
 		free(line);
 	}
 	free(line);
+	printf("TUT [%s] [%s]\n", champ->base->prog_name, champ->base->comment);
 	// printf("name = [%s]\ncomment = [%s]", champ->name, champ->comment);
-	if (!champ->name || !champ->comment)
+	if (champ->base->prog_name[0] == '\0' || champ->base->comment[0] == '\0')
 		p_error("\nERROR! Name and comment of champion are needed.\n");
-	if (ft_strlen(champ->name) > PROG_NAME_LENGTH 
-		|| ft_strlen(champ->comment) > COMMENT_LENGTH)
-		p_error("\nERROR! Too long command line. Max length .name = 128, .comment = 2048\n");
 }
 
 int save_file_name(char *f_name, t_all *champ)
@@ -50,39 +48,26 @@ int save_file_name(char *f_name, t_all *champ)
 	return (1);
 }
 
-void parse_string_save_data(char *line, t_all *champ)
+void	check_name_comment(char *line, t_all *champ)
 {
-	int		i;
-
-	i = 0;
 	char **str;
-	str = NULL;
 
 	str = ft_strsplit_new(line);
 	if (!str || (!ft_strequ(str[0], ".name") && !ft_strequ(str[0], ".comment")))
 		p_error("\nERROR! Invalid command.\n");
-	// printf("TUT %s\n", str[1]);
 	if (ft_strequ(str[0], ".name"))
-	{
-		if (champ->name)
-			p_error("\nERROR! Invalid command.\n");
-		champ->name = save_command_data(line, 5);
-	}
+		init_name(champ, line);
 	else
-	{
-		if (champ->comment)
-			p_error("\nERROR! Invalid command.\n");
-		champ->comment = save_command_data(line, 8);
-	}
+		init_comment(champ, line);
 	del_arr(str);
 }
 
-char *save_command_data(char *line, int index)
+char 	*save_command_data(char *line, int index)
 {
 	int		i;
 	char	*str;
 
-	while (line[index++] != '\n')
+	while (line[index++]) ////'\n'?
 	{
 		if (line[index] == '"')
 			break;
@@ -98,6 +83,7 @@ char *save_command_data(char *line, int index)
 	if (line[i] == '\n' || line[i] == '\0' || check_tail(line + i + 1))
 		p_error("\nERROR! Invalid data in command line.\n");
 	str = ft_strnew(i - index + 1);
+	// str = ft_strdup(line + (index + 1)), ((i - 1) - index);
 	ft_strncpy(str, (line + (index + 1)), ((i - 1) - index));
 	// printf("str =  %s\n", str);
 	return (str);

@@ -5,12 +5,20 @@
 # include "../inc/libft.h"
 # include "../inc/ft_printf.h"
 
+typedef struct  s_token
+{
+    char            *name;
+    t_arg_type      type;
+    int             step;
+    struct s_token  *next;
+}               t_token;
+
 typedef struct  s_all
 {
-    char    *file_name;
-    char    *name;
-    char    *comment;
-    // int fd;
+    char        *file_name;
+    headers_t   *base;
+    t_token     head;
+    int         byte_counter; 
 }               t_all;
 
 typedef struct  s_op
@@ -28,9 +36,13 @@ typedef struct  s_op
 // save name and comment
 void            save_name(char *name, int fd, t_all *champ);
 int             save_file_name(char *f_name, t_all *champ);
-void            parse_string_save_data(char *line, t_all *champ);
-char            *save_command_data(char *line, int index);
+void            check_name_comment(char *line, t_all *champ);
+char 	        *save_command_data(char *line, int index);
 int             check_tail(char *line);
+void            init_name(t_all *champ, char *line);
+void            parse_string_save_data(char *line, t_all *champ);
+void            init_comment(t_all *champ, char *line);
+
 
 // additional functions
 char            **ft_strsplit_new(char const *s);
