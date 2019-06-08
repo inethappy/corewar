@@ -7,7 +7,7 @@
 .comment 	"Jour Js"
 
 		ld   %0,r3		
-label:		zjmp %:avantdebt
+		zjmp %:avantdebt
 		zjmp %0				# pour eviter ecrasement
 						# de l'instruction suivante
 code:		live %42			# 5

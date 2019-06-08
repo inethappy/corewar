@@ -15,7 +15,7 @@ void save_name(char *name, int fd, t_all *champ)
 		free(line);
 	}
 	free(line);
-	printf("TUT [%s] [%s]\n", champ->base->prog_name, champ->base->comment);
+	// printf("TUT [%s] [%s]\n", champ->base->prog_name, champ->base->comment);
 	// printf("name = [%s]\ncomment = [%s]", champ->name, champ->comment);
 	if (champ->base->prog_name[0] == '\0' || champ->base->comment[0] == '\0')
 		p_error("\nERROR! Name and comment of champion are needed.\n");

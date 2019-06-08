@@ -5,33 +5,37 @@
 # include "../inc/libft.h"
 # include "../inc/ft_printf.h"
 
+typedef enum s_types {label, op, reg, dir, indir, dir_l, indir_l} token_type;
+
 typedef struct  s_token
 {
-    char            *name;
-    t_arg_type      type;
-    int             step;
-    struct s_token  *next;
+    char        *name;
+    int         type;
+    int         step;
 }               t_token;
 
 typedef struct  s_all
 {
     char        *file_name;
     headers_t   *base;
-    t_token     head;
+    t_list     *head;
     int         byte_counter; 
+    int         tdir_size;
 }               t_all;
 
 typedef struct  s_op
 {
-    char    *name;
-    int     arg_number;
-    char    arg[3];
-    int     code_op;
-    int     cycle_to_do;
-    char    *op_description;
-    int     byte;
-    int     arg_size;
+    char        *name;
+    int         arg_number;
+    char        arg[3];
+    int         code_op;
+    int         cycle_to_do;
+    char        *op_description;
+    int         byte;
+    int         arg_size;
 }               t_op;
+
+t_op            oper[17];
 
 // save name and comment
 void            save_name(char *name, int fd, t_all *champ);
