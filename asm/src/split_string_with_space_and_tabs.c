@@ -32,9 +32,9 @@ char	*ft_one_word_new(const char *s, int *i)
 	c = s[j];
 	j = 0;
 	temp = (char *)malloc(sizeof(temp) * (ft_str_len_n(s, c)) + 1);
-	while (s[*i] == c && s[*i] != '\0')
+	while ((s[*i] == ' ' || s[*i] == '\t') && s[*i] != '\0')
 		*i += 1;
-	while (s[*i] != c && s[*i])
+	while (s[*i] != ' ' && s[*i] != '\t' && s[*i])
 	{
 		temp[j] = s[*i];
 		j++;

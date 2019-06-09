@@ -9,7 +9,7 @@ void save_name(char *name, int fd, t_all *champ)
 	while (get_next_line(fd, &line))
 	{
 		if (line[0] == '.')
-			check_name_comment(line, champ);
+			check_name_comment(fd, line, champ);
 		if (!ft_strchr(line, '"') && line[0] != '#' && line[0] != ';')
 			break ;
 		free(line);
@@ -48,7 +48,7 @@ int save_file_name(char *f_name, t_all *champ)
 	return (1);
 }
 
-void	check_name_comment(char *line, t_all *champ)
+void	check_name_comment(int fd, char *line, t_all *champ)
 {
 	char **str;
 
@@ -56,36 +56,55 @@ void	check_name_comment(char *line, t_all *champ)
 	if (!str || (!ft_strequ(str[0], ".name") && !ft_strequ(str[0], ".comment")))
 		p_error("\nERROR! Invalid command.\n");
 	if (ft_strequ(str[0], ".name"))
-		init_name(champ, line);
+		init_name(fd, champ, line);
 	else
-		init_comment(champ, line);
+		init_comment(fd, champ, line);
 	del_arr(str);
 }
 
-char 	*save_command_data(char *line, int index)
+char 	*save_command_data(int fd, char *line, int index)
 {
 	int		i;
 	char	*str;
 
-	while (line[index++]) ////'\n'?
-	{
-		if (line[index] == '"')
-			break;
-		else if (line[index] != ' ' && line[index] != '\t')
+	while (line[++index] != '"')
+		if (line[index] != ' ' && line[index] != '\t')
 			p_error("\nERROR! Invalid data in command line.\n");
-	}
 	i = index;
-	while (line[++i])// != '\n')
+	while (line[++i] != '"')
+	if (line[i] == '\0')
 	{
-		if (line[i] == '"')
-			break;
+		printf("JFHFHHF\n");
+		str = ft_strdup(line + index + 1);
+	printf("str =  %s\n", str);
+
+		free(line);
+		while (get_next_line(fd, &line))// && !ft_strchr(line, '"'))
+		{
+			if (ft_strchr(line, '"') && !ft_strchr(ft_strchr(line, '"'), '#'))
+			{
+				i = 0;
+				while (line[i] != '"')
+					i++;
+				char *buf;
+				buf = ft_strnew(i);
+				ft_strncpy(buf, line, i);
+				printf("line = [%s] str = [%s] join = [%s]\n", line, str, ft_strjoin(str, buf));			
+				return (ft_strjoin(str, buf));
+				// break ;
+			}
+			else if (line[0] != '#')
+				p_error("\nERROR! Invalid data in command line.\n");
+
+			// free(line);
+		}
+		
 	}
-	if (line[i] == '\n' || line[i] == '\0' || check_tail(line + i + 1))
+	if (check_tail(line + i + 1))
 		p_error("\nERROR! Invalid data in command line.\n");
 	str = ft_strnew(i - index + 1);
-	// str = ft_strdup(line + (index + 1)), ((i - 1) - index);
 	ft_strncpy(str, (line + (index + 1)), ((i - 1) - index));
-	// printf("str =  %s\n", str);
+	printf("str =  %s\n", str);
 	return (str);
 }
 

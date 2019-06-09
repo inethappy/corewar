@@ -20,7 +20,7 @@ typedef struct  s_all
     headers_t   *base;
     t_list     *head;
     int         byte_counter; 
-    int         tdir_size;
+    int         tdir_size_cur;
 }               t_all;
 
 typedef struct  s_op
@@ -31,21 +31,21 @@ typedef struct  s_op
     int         code_op;
     int         cycle_to_do;
     char        *op_description;
-    int         byte;
     int         arg_size;
+    int         tdir_size;
 }               t_op;
 
-t_op            oper[17];
+t_op            op_tab[17];
 
 // save name and comment
 void            save_name(char *name, int fd, t_all *champ);
 int             save_file_name(char *f_name, t_all *champ);
-void            check_name_comment(char *line, t_all *champ);
-char 	        *save_command_data(char *line, int index);
+void            check_name_comment(int fd, char *line, t_all *champ);
+char 	        *save_command_data(int fd, char *line, int index);
 int             check_tail(char *line);
-void            init_name(t_all *champ, char *line);
+void            init_name(int fd, t_all *champ, char *line);
 void            parse_string_save_data(char *line, t_all *champ);
-void            init_comment(t_all *champ, char *line);
+void            init_comment(int fd, t_all *champ, char *line);
 
 
 // additional functions
