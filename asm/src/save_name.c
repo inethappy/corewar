@@ -62,10 +62,42 @@ void	check_name_comment(int fd, char *line, t_all *champ)
 	del_arr(str);
 }
 
+char *find_string_tail(char *line, int index, int fd)//, char *str)
+{
+	int		i;
+	char	*buf;
+	char	*str;
+
+	str = ft_strdup(line + index + 1);
+	free(line);
+	buf = NULL;
+	while (get_next_line(fd, &line))// && !ft_strchr(line, '"'))
+	{
+		if (ft_strchr(line, '"') && (i = -1))
+		{
+			while (line[++i] != '"')
+				if (line[i] == COMMENT_CHAR || line[i] == ALT_COMMENT_CHAR)
+					return (NULL);
+			buf = ft_strnew(i + 1);
+			ft_strncpy(buf, line, i);
+			break ;
+		}
+		else if (line[0] != '#')
+			p_error("\nERROR! Invalid data in command line.\n");
+		free(line);
+	}
+	line = ft_strjoin(str, buf);
+	free(str);
+	free(buf);
+	// printf("line = [%s] str = [%s] join = [%s]\n", line, str, ft_strjoin(str, buf));			
+	return (line);
+}
+
 char 	*save_command_data(int fd, char *line, int index)
 {
 	int		i;
 	char	*str;
+	char	*str2;
 
 	while (line[++index] != '"')
 		if (line[index] != ' ' && line[index] != '\t')
@@ -73,33 +105,8 @@ char 	*save_command_data(int fd, char *line, int index)
 	i = index;
 	while (line[++i] != '"')
 	if (line[i] == '\0')
-	{
-		printf("JFHFHHF\n");
-		str = ft_strdup(line + index + 1);
-	printf("str =  %s\n", str);
-
-		free(line);
-		while (get_next_line(fd, &line))// && !ft_strchr(line, '"'))
-		{
-			if (ft_strchr(line, '"') && !ft_strchr(ft_strchr(line, '"'), '#'))
-			{
-				i = 0;
-				while (line[i] != '"')
-					i++;
-				char *buf;
-				buf = ft_strnew(i);
-				ft_strncpy(buf, line, i);
-				printf("line = [%s] str = [%s] join = [%s]\n", line, str, ft_strjoin(str, buf));			
-				return (ft_strjoin(str, buf));
-				// break ;
-			}
-			else if (line[0] != '#')
-				p_error("\nERROR! Invalid data in command line.\n");
-
-			// free(line);
-		}
-		
-	}
+		if ((str2 = find_string_tail(line, index, fd)) != NULL)
+			return (str2);
 	if (check_tail(line + i + 1))
 		p_error("\nERROR! Invalid data in command line.\n");
 	str = ft_strnew(i - index + 1);

@@ -230,6 +230,7 @@ void	save_inctructions(int fd,t_all *champ)
 			check_save_label(line, champ);
 	}
 	// printf("kfkfkfkfkkf\n");
+	printf("name [%s]\ncomment [%s]\n", champ->base->prog_name, champ->base->comment);
 
 	t_list *ll = champ->head;
 	while (ll)
