@@ -9,8 +9,11 @@ SOURCES		:=	main.c \
 				split_string_with_space_and_tabs.c \
 				op.c \
 				save_name.c \
-				init_name.c
-				
+				init_name.c \
+				additional_functions.c \
+				save_instructions.c	\
+				parse_tokens.c \
+				check_tokens.c			
 
 OBJECTS		:= $(addprefix $(OBJECTS_DIR), $(SOURCES:.c=.o))
 
