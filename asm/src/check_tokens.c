@@ -56,10 +56,14 @@ void check_save_op(char *instr, t_all *champ)
 	int     i;
 	t_token *ptr;
 
-	i = 0;
-	while (i++ < 16)
+	i = -1;
+	while (++i < 16)
 		if (ft_strequ(instr, op_tab[i].name))
 			break ;
+	// printf("--- %s +++%s\n", op_tab[i].name, instr);
+
+	if (i == 16)
+		p_error("\nERROR! Invalid operation.\n");
 	ptr = ft_memalloc(sizeof(t_token));
 	ptr->name = ft_strdup(instr);
 	ptr->type = op;
@@ -67,6 +71,8 @@ void check_save_op(char *instr, t_all *champ)
 	champ->tdir_size_cur = (op_tab[i].tdir_size == 1) ? 2 : 4;
 	// printf("--- %s %d\n", op_tab[i].name, op_tab[i].arg_size);
 	champ->byte_counter += (op_tab[i].arg_size == 1) ? 2 : 1;
+	printf("---%s\n", ptr->name);
+	// add_list(champ->head, ptr);
 	if (!champ->head)
 		champ->head = ft_lstnew_new(ptr, sizeof(t_token));
 	else

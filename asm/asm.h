@@ -10,6 +10,7 @@ typedef enum s_types {label, op, reg, dir, indir, dir_l, indir_l} token_type;
 typedef struct  s_token
 {
     char        *name;
+    char        arg_type;
     int         type;
     int         step;
 }               t_token;
@@ -55,6 +56,8 @@ char            *ft_one_word_new(const char *s, int *i);
 int             ft_words_counter_new(const char *s);
 t_list          *ft_lstnew_new(void *content, size_t content_size);
 int             is_register(char *token);
+void            add_list(t_list *list, t_token *ptr);
+
 
 // save file
 void            save_inctructions(int fd,t_all *champ);

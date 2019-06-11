@@ -1,5 +1,13 @@
 #include "../asm.h"
 
+void add_list(t_list *list, t_token *ptr)
+{
+	if (!list)
+		list = ft_lstnew_new(ptr, sizeof(t_token));
+	else
+		ft_lstadd_end(list, ft_lstnew_new(ptr, sizeof(t_token)));
+}
+
 int     is_register(char *token)
 {
 	int	i;

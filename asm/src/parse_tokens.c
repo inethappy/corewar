@@ -28,7 +28,7 @@ void	save_inctructions(int fd,t_all *champ)
 	while (ll)
 	{
 		t_token *tt = ll->content;
-		printf("TOKEN %10s step %5d type %5d\n", tt->name, tt->step, tt->type);
+		printf("TOKEN %10s step %5d type %5d arg_type %5c\n", tt->name, tt->step, tt->type, tt->arg_type);
 		ll = ll->next;
 	}
 }
