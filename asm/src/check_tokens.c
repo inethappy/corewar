@@ -45,10 +45,10 @@ void check_save_label(char *line, t_all *champ)
 		}
 		i++;
 	}
-	if (!champ->labels)
-		champ->labels = ft_lstnew_new(ptr, sizeof(t_token));
-	else
-		ft_lstadd_end(champ->labels, ft_lstnew_new(ptr, sizeof(t_token)));
+	if (ft_strlen(ptr->name) == 0)
+		p_error("\nERROR! Invalid label.\n");
+	// printf("===[%s] %zu\n", ptr->name, ft_strlen(ptr->name));
+	add_list(&champ->labels, ptr);
 }
 
 void check_save_op(char *instr, t_all *champ)
@@ -61,7 +61,6 @@ void check_save_op(char *instr, t_all *champ)
 		if (ft_strequ(instr, op_tab[i].name))
 			break ;
 	// printf("--- %s +++%s\n", op_tab[i].name, instr);
-
 	if (i == 16)
 		p_error("\nERROR! Invalid operation.\n");
 	ptr = ft_memalloc(sizeof(t_token));
@@ -71,10 +70,5 @@ void check_save_op(char *instr, t_all *champ)
 	champ->tdir_size_cur = (op_tab[i].tdir_size == 1) ? 2 : 4;
 	// printf("--- %s %d\n", op_tab[i].name, op_tab[i].arg_size);
 	champ->byte_counter += (op_tab[i].arg_size == 1) ? 2 : 1;
-	printf("---%s\n", ptr->name);
-	// add_list(champ->head, ptr);
-	if (!champ->head)
-		champ->head = ft_lstnew_new(ptr, sizeof(t_token));
-	else
-		ft_lstadd_end(champ->head, ft_lstnew_new(ptr, sizeof(t_token)));
+	add_list(&champ->head, ptr);
 }

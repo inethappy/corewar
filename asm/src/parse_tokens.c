@@ -15,6 +15,7 @@ void	save_inctructions(int fd,t_all *champ)
 		free(line);
 		del_arr(token);
 	}
+	free(line);
 
 	printf("name [%s]\ncomment [%s]\n", champ->base->prog_name, champ->base->comment);
 	t_list *ll = champ->head;
@@ -28,9 +29,64 @@ void	save_inctructions(int fd,t_all *champ)
 	while (ll)
 	{
 		t_token *tt = ll->content;
-		printf("TOKEN %10s step %5d type %5d arg_type %5c\n", tt->name, tt->step, tt->type, tt->arg_type);
+		printf("TOKEN %10s step %5d type %5d arg_type %5d\n", tt->name, tt->step, tt->type, tt->arg_type);
 		ll = ll->next;
 	}
+}
+
+int check_separator(char **token, int i)
+{
+	int count;
+	int cur;
+
+	count = -1;
+	while (++count < 16)
+		if (ft_strstr(token[i], op_tab[count].name))
+			break ;
+	if (count == 16)
+		p_error("\nERROR! Invalid operation.\n");
+	if (op_tab[count].arg_number == 1)
+		return (1);
+	cur = i + 1;
+
+	while (token[cur])
+	{
+
+		if (token[cur][0] == '#')
+			break ;
+		if (!ft_strchr(token[cur], ',') && token[cur + 1]
+			&& token[cur + 1][0] != '#' && token[cur + 1][0] != ',')
+			p_error("\nERROR! Invalid instruction.\n");
+
+		cur++;
+	}
+
+	return (1);
+}
+
+int detect_instruction(char *token)
+{
+	if (ft_strchr(token, ',') && (ft_strchr(token, ',') + 1)[0] == ',')
+		p_error("\nERROR! Invalid instruction.\n");
+	if (ft_strchr(token, ','))// && !ft_strchr((ft_strchr(token, ',') + 1), ','))
+		return (1);
+	if (ft_strchr(token, '%') || is_register(token)
+		|| ft_isdigit(token[0]) || token[0] == '-')
+		return (1);
+
+	return (0);
+}
+
+int detect_label(char *token, int *label)
+{
+	if (ft_strchr(token, LABEL_CHAR) && *(ft_strchr(token, LABEL_CHAR) - 1) != '%')
+	{
+		*label += 1;
+		if (*label > 1)
+		p_error("\nERROR! Invalid label.\n");
+		return (1);
+	}
+	return (0);
 }
 
 void parse_string_save_tokens(char **token, t_all *champ)
@@ -42,21 +98,22 @@ void parse_string_save_tokens(char **token, t_all *champ)
 	label = 0;
 	while (token[i])
 	{
-		// printf("after splitnew [%s]\n", token[i]);
+
 		if (token[i][0] == '#')
 			break ;
-		if (ft_strchr(token[i], LABEL_CHAR) && *(ft_strchr(token[i], LABEL_CHAR) - 1) != '%')
-		{
-			if (label > 0)
-				p_error("\nERROR! Invalid label.\n");
+		if (token[i][ft_strlen(token[i]) - 1] == ',' && (!token[i + 1] || (token[i + 1][0] == ',')))
+				p_error("\nERROR! Invalid instruction.\n");
+		if (detect_label(token[i], &label))
 			check_save_label(token[i], champ);
-			label++;
-		}
-		else if (ft_strchr(token[i], ',') || ft_strchr(token[i], '%') 
-			|| is_register(token[i]) || ft_isdigit(token[i][0] || token[i][0] == '-'))
+		else if (detect_instruction(token[i]))
 			check_save_instr(ft_strsplit(token[i], SEPARATOR_CHAR), champ);
 		else
+		{
+			if (token[i + 1][0] == ',' || !check_separator(token, i))
+				p_error("\nERROR! Invalid instruction.\n");
+
 			check_save_op(token[i], champ);
+		}
 		i++;
 	}
 }

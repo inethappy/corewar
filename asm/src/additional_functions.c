@@ -1,17 +1,18 @@
 #include "../asm.h"
 
-void add_list(t_list *list, t_token *ptr)
+void add_list(t_list **list, t_token *ptr)
 {
-	if (!list)
-		list = ft_lstnew_new(ptr, sizeof(t_token));
+	if (!*list)
+		*list = ft_lstnew_new(ptr, sizeof(t_token));
 	else
-		ft_lstadd_end(list, ft_lstnew_new(ptr, sizeof(t_token)));
+		ft_lstadd_end(*list, ft_lstnew_new(ptr, sizeof(t_token)));
 }
 
 int     is_register(char *token)
 {
 	int	i;
 
+	printf("===%s\n", token);
 	if (token[0] != 'r' || !(ft_atoi(token + 1) > 0 && ft_atoi(token + 1) < 100))
 		return (0);
 	i = 1;
@@ -21,7 +22,7 @@ int     is_register(char *token)
 			p_error("\nERROR! Invalid register.\n");
 		else if (token[i] == COMMENT_CHAR || token[i] == ALT_COMMENT_CHAR)
 			break ;
-		i++;		
+		i++;
 	}
 	return (1);
 }
@@ -45,4 +46,11 @@ t_list  *ft_lstnew_new(void *content, size_t content_size)
 	}
 	new->next = NULL;
 	return (new);
+}
+
+void	del_list(t_token *token, size_t content_size)
+{
+	content_size = 0;
+	free(token->name);
+	free(token);
 }
