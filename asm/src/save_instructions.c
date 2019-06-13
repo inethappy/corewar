@@ -9,10 +9,10 @@ void set_instr_label(char *instr, t_all *champ, int i)
 	champ->byte_counter += (i == 2) ? champ->tdir_size_cur : 2;
 	ptr->type = (i == 2) ? dir_l : indir_l;
 	ptr->arg_type = (i == 2) ? T_DIR : T_IND;
+	ptr->name = (i == 2) ? ft_strdup(instr + 2) : ft_strdup(instr + 1);
 	while (instr[i])
 		if (!ft_strchr(LABEL_CHARS, instr[i++]))
 			p_error("\nERROR! Invalid instrution.\n");
-	ptr->name = ft_strdup(instr + 2);
 	add_list(&champ->head, ptr);
 }
 

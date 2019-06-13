@@ -1,20 +1,25 @@
 #include "../asm.h"
 
-void check_save_instr(char **arg, t_all *champ)
+void	check_save_instr(char **arg, t_all *champ)
 {
 	int		i;
 
 	i = 0;
 	while (arg[i])
 	{
-		// printf("tutb {%s}\n", arg[i]);
+		printf("tutb {%s}\n", arg[i]);
+		if (ft_strchr(arg[i], '%') && arg[i][0] != '%')
+		{
+			del_arr(arg);
+			return ; // for split ":%live:ld & etc"
+		}
 		if (is_register(arg[i]))
 			set_instr_reg(arg[i], champ);
 		else if (arg[i][0] == '%' && arg[i][1] == ':')
 			set_instr_label(arg[i], champ, 2);
 		else if (arg[i][0] == ':')
 			set_instr_label(arg[i], champ, 1);
-		else if ((arg[i][0] == '%' && (ft_isdigit(arg[i][1]) || arg[i][1] == '-')) 
+		else if ((arg[i][0] == '%' && (ft_isdigit(arg[i][1]) || arg[i][1] == '-'))
 			|| ft_isdigit(arg[i][0]) || arg[i][0] == '-')
 			set_instr_nb(arg[i], champ);
 		else
@@ -24,20 +29,23 @@ void check_save_instr(char **arg, t_all *champ)
 	del_arr(arg);
 }
 
-void check_save_label(char *line, t_all *champ)
+void	check_save_label(char *line, t_all *champ)
 {
 	int		i;
 	t_token	*ptr;
 
 	i = 0;
-	ptr = ft_memalloc(sizeof(t_token));
+	ptr = NULL;
 	while(line[i])
 	{
-		if ((!ft_strchr(LABEL_CHARS, line[i]) && line[i] != LABEL_CHAR) 
-			|| (line[i] == LABEL_CHAR && ptr->name))
+		if ((!ft_strchr(LABEL_CHARS, line[i]) && line[i] != LABEL_CHAR)
+			|| (line[i] == LABEL_CHAR && ptr && ptr->name))
 			p_error("\nERROR! Invalid label.\n"); /// at string... ?
 		if (line[i] == LABEL_CHAR)
 		{
+			if (line[i + 1])
+				return ; // for split "live:ld & etc"
+			ptr = ft_memalloc(sizeof(t_token));
 			ptr->name = ft_strnew(i);
 			ft_strncpy(ptr->name, line, i);
 			ptr->step = champ->byte_counter;
@@ -47,14 +55,13 @@ void check_save_label(char *line, t_all *champ)
 	}
 	if (ft_strlen(ptr->name) == 0)
 		p_error("\nERROR! Invalid label.\n");
-	// printf("===[%s] %zu\n", ptr->name, ft_strlen(ptr->name));
 	add_list(&champ->labels, ptr);
 }
 
-void check_save_op(char *instr, t_all *champ)
+void	check_save_op(char *instr, t_all *champ)
 {
-	int     i;
-	t_token *ptr;
+	int		i;
+	t_token	*ptr;
 
 	i = -1;
 	while (++i < 16)

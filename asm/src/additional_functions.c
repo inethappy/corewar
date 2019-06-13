@@ -12,7 +12,6 @@ int     is_register(char *token)
 {
 	int	i;
 
-	printf("===%s\n", token);
 	if (token[0] != 'r' || !(ft_atoi(token + 1) > 0 && ft_atoi(token + 1) < 100))
 		return (0);
 	i = 1;

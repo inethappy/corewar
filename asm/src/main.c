@@ -15,6 +15,7 @@ int		main(int argc, char **argv)
 	save_name(argv[1], fd, champ);
 	save_inctructions(fd, champ);
 	tokens_validation(champ->head, champ);
+	write_in_file(champ);
 	system("leaks asm > leaks.txt");
-	return 0;	
+	return 0;
 }

@@ -23,6 +23,7 @@ typedef struct	s_all
 	t_list		*labels;
 	int			byte_counter;
 	int			tdir_size_cur;
+	int			file_fd;
 }				t_all;
 
 typedef struct	s_op
@@ -64,8 +65,8 @@ void			save_inctructions(int fd,t_all *champ);
 
 void			parse_string_save_tokens(char **token, t_all *champ);
 int			 	check_separator(char **token, int i);
-int				detect_instruction(char *token);
-int				detect_label(char *token, int *label);
+int				detect_instruction(char *token, t_all *champ);
+int				detect_label(char *token, int *label, t_all *champ);
 
 void			check_save_op(char *instr, t_all *champ);
 void			check_save_label(char *line, t_all *champ);
@@ -81,5 +82,8 @@ void			check_arguments(t_list *all, t_token *cur, t_all *champ);
 void			is_correct_args(t_list *args, int op_nb, t_all *champ);
 int				calculate_args(t_list *args);
 void			is_existing_label(char *name, t_list *labels);
+
+void write_in_file(t_all *champ);
+
 
 #endif

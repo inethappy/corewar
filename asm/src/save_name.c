@@ -19,6 +19,7 @@ void save_name(char *name, int fd, t_all *champ)
 	// printf("name = [%s]\ncomment = [%s]", champ->name, champ->comment);
 	if (champ->base->prog_name[0] == '\0' || champ->base->comment[0] == '\0')
 		p_error("\nERROR! Name and comment of champion are needed.\n");
+
 }
 
 int save_file_name(char *f_name, t_all *champ)
@@ -36,7 +37,7 @@ int save_file_name(char *f_name, t_all *champ)
 		while (fn[++i])
 			if (!fn[i + 1])
 				name = ft_strdup(fn[i]);
-	}	
+	}
 	if (name[ft_strlen(name) - 2] != '.' || name[ft_strlen(name) - 1] != 's')
 		return (0);
 	champ->file_name = ft_strnew(ft_strlen(name) + 2);
@@ -44,7 +45,7 @@ int save_file_name(char *f_name, t_all *champ)
 	ft_strcpy((champ->file_name + ft_strlen(champ->file_name)), ".cor");
 	del_arr(fn);
 	free(name);
-	// printf("file name [%s]\n",champ->file_name);
+	champ->file_fd = open(champ->file_name, O_CREAT | O_TRUNC | O_WRONLY, 0644);
 	return (1);
 }
 

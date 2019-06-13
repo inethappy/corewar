@@ -8,7 +8,7 @@ gobepc:	st r1,6			# 03 70 01 00 06			5
 	live %66		# 01 00 00 00 42			10
 	ld -4,r1		# 02 d0 ff fc 01			5
 	st r2,-14		# 03 70 02 ff f2			5
-	
+
 	ld %0,r5
 	zjmp %:init
 
@@ -64,12 +64,12 @@ source:	live %1
 	zjmp %:arbre
 
 arbre:	live %1
-	fork %:gen22	
+	fork %:gen22
 
 
-gen21:	live %1		
+gen21:	live %1
 	zjmp %:slide1
-gen22:	live %1		
+gen22:	live %1
 	zjmp %:slide2
 
 

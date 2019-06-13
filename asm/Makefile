@@ -14,7 +14,8 @@ SOURCES		:=	main.c \
 				save_instructions.c	\
 				parse_tokens.c \
 				check_tokens.c \
-				tokens_validation.c
+				tokens_validation.c \
+				create_file.c
 
 OBJECTS		:= $(addprefix $(OBJECTS_DIR), $(SOURCES:.c=.o))
 
