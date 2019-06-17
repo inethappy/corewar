@@ -15,17 +15,102 @@ void    tokens_validation(t_list *all, t_all *champ)
 	}
 }
 
-void	check_arguments(t_list *all, t_token *cur, t_all *champ)
+void	save_args_code(t_list *args, t_all *champ)
 {
 	int		i;
+	int		res;
+	t_token	*arg;
+
+	i = 0;
+	res = 0;
+	while (args)// && i < op_tab[op_nb].arg_number)
+	{
+		arg = args->content;
+		if (arg->type == 2)
+			res |= 64 >> 2 * i;
+		else if (arg->type == 3 || arg->type == 5)
+			res |= 128 >> 2 * i;
+		else if (arg->type == 4 || arg->type == 6)
+			res |= 192 >> 2 * i;
+		i++;
+		args = args->next;
+	}
+	// printf("YAYAYAYAYAY%d\n", res);
+	ft_lstadd_end(champ->code, ft_lstnew(&res, 1));
+	// int *g = champ->code->next->content;
+	// printf("YAYAYAYAYAY%x\n", *g);
+
+}
+
+int find_label(t_token *arg, t_list *lbls, t_token *cur)// t_all *champ)
+{
 	t_token	*token;
-	t_list	*args;
+
+	while (lbls)
+	{
+		token = lbls->content;
+		if (ft_strequ(token->name, arg->name))
+		{
+			printf("[%s] [%s] [%s], [%d] [%d]\n", cur->name, token->name, arg->name, token->step, cur->step);
+			return (token->step - cur->step);
+		}
+		lbls = lbls->next;
+	}
+	return (0);
+}
+
+void	save_args(t_list *args, int op_nb, t_all *champ, t_token *cur)
+{
+	t_token	*arg;
+	int res;
+	int tdir;
+
+	tdir = (op_tab[op_nb].tdir_size == 1) ? 2 : 4;
+	while (args)
+	{
+		arg = args->content;
+		printf("===%s %d\n", arg->name, arg->type);
+		if (arg->type == 2)
+		{
+			res = ft_atoi(arg->name + 1);
+			ft_lstadd_end(champ->code, ft_lstnew(&res, 1));
+		}
+		else if (arg->type == 3)
+		{
+			res = ft_atoi(arg->name);
+			ft_lstadd_end(champ->code, ft_lstnew(&res, tdir));
+		}
+		else if (arg->type == 5)
+		{
+			res = find_label(arg, champ->labels, cur);
+			ft_lstadd_end(champ->code, ft_lstnew(&res, tdir));
+		}
+		else if (arg->type == 4)
+			ft_lstadd_end(champ->code, ft_lstnew(arg->name - 48, 4));
+		else if (arg->type == 6)
+		{
+			res = find_label(arg, champ->labels, cur);
+			ft_lstadd_end(champ->code, ft_lstnew(&res, 4));
+		}
+		args = args->next;
+	}
+}
+
+void	check_arguments(t_list *all, t_token *cur, t_all *champ)
+{
+	int			i;
+	t_token		*token;
+	t_list		*args;
 
 	args = NULL;
 	i = -1;
 	while (++i < 16)
 		if (ft_strequ(cur->name, op_tab[i].name))
 			break ;
+	if (!champ->code)
+		champ->code = ft_lstnew(&op_tab[i].code_op, 1);
+	else
+		ft_lstadd_end(champ->code, ft_lstnew(&op_tab[i].code_op, 1));
 	all = all->next;
 	while (all)
 	{
@@ -37,7 +122,19 @@ void	check_arguments(t_list *all, t_token *cur, t_all *champ)
 		all = all->next;
 	}
 	is_correct_args(args, i, champ);
-	ft_lstdel(&args, (void*)del_list);
+	if (op_tab[i].arg_size)
+		save_args_code(args, champ);
+	save_args(args, i, champ, cur);
+	// t_list *l;
+	// l = champ->code;
+	// while (l)
+	// {
+	// 	int *f = l->content;
+	// 	printf("%d, %zu", *f, l->content_size);
+	// 	l = l->next;
+	// }
+	// printf("%s [%d]\n", cur->name, cur->code->args_code);
+	// ft_lstdel(&args, (void*)del_list);
 }
 
 void is_correct_args(t_list *args, int op_nb, t_all *champ)
@@ -50,7 +147,7 @@ void is_correct_args(t_list *args, int op_nb, t_all *champ)
 	if (calculate_args(args) != op_tab[op_nb].arg_number)
 		p_error("\nERROR! Wrong number of argument!\n");
 	i = 0;
-	while (args && i < op_tab[op_nb].arg_number)
+	while (args)// && i < op_tab[op_nb].arg_number)
 	{
 		token = args->content;
 		if ((token->arg_type & op_tab[op_nb].arg[i]) == 0)

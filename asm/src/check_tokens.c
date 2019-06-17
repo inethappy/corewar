@@ -23,7 +23,9 @@ void	check_save_instr(char **arg, t_all *champ)
 			|| ft_isdigit(arg[i][0]) || arg[i][0] == '-')
 			set_instr_nb(arg[i], champ);
 		else
-			p_error("POKA HZ\n");
+			error_in_line("POKA HZ", champ->line_counter);
+
+			// p_error("POKA HZ\n");
 		i++;
 	}
 	del_arr(arg);
@@ -40,7 +42,9 @@ void	check_save_label(char *line, t_all *champ)
 	{
 		if ((!ft_strchr(LABEL_CHARS, line[i]) && line[i] != LABEL_CHAR)
 			|| (line[i] == LABEL_CHAR && ptr && ptr->name))
-			p_error("\nERROR! Invalid label.\n"); /// at string... ?
+			error_in_line("ERROR!  Invalid label", champ->line_counter);
+
+			// p_error("\nERROR! Invalid label.\n"); /// at string... ?
 		if (line[i] == LABEL_CHAR)
 		{
 			if (line[i + 1])
@@ -54,7 +58,8 @@ void	check_save_label(char *line, t_all *champ)
 		i++;
 	}
 	if (ft_strlen(ptr->name) == 0)
-		p_error("\nERROR! Invalid label.\n");
+		error_in_line("ERROR!  Invalid label", champ->line_counter);
+		// p_error("\nERROR! Invalid label.\n");
 	add_list(&champ->labels, ptr);
 }
 
@@ -69,7 +74,8 @@ void	check_save_op(char *instr, t_all *champ)
 			break ;
 	// printf("--- %s +++%s\n", op_tab[i].name, instr);
 	if (i == 16)
-		p_error("\nERROR! Invalid operation.\n");
+		error_in_line("ERROR! Invalid operation", champ->line_counter);
+		// p_error("\nERROR! Invalid operation.\n");
 	ptr = ft_memalloc(sizeof(t_token));
 	ptr->name = ft_strdup(instr);
 	ptr->type = op;

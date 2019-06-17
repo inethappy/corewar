@@ -8,6 +8,7 @@ void save_name(char *name, int fd, t_all *champ)
 		p_error("\nERROR! Wrong file extension: only *.s please.\n");
 	while (get_next_line(fd, &line))
 	{
+		champ->line_counter++;
 		if (line[0] == '.')
 			check_name_comment(fd, line, champ);
 		if (!ft_strchr(line, '"') && line[0] != '#' && line[0] != ';')
@@ -15,11 +16,8 @@ void save_name(char *name, int fd, t_all *champ)
 		free(line);
 	}
 	free(line);
-	// printf("TUT [%s] [%s]\n", champ->base->prog_name, champ->base->comment);
-	// printf("name = [%s]\ncomment = [%s]", champ->name, champ->comment);
 	if (champ->base->prog_name[0] == '\0' || champ->base->comment[0] == '\0')
 		p_error("\nERROR! Name and comment of champion are needed.\n");
-
 }
 
 int save_file_name(char *f_name, t_all *champ)
@@ -55,7 +53,8 @@ void	check_name_comment(int fd, char *line, t_all *champ)
 
 	str = ft_strsplit_new(line);
 	if (!str || (!ft_strstr(line, ".name") && !ft_strstr(line, ".comment")))//(!ft_strequ(str[0], ".name") && !ft_strequ(str[0], ".comment")))
-		p_error("\nERROR! Invalid command.\n");
+		error_in_line("ERROR! Invalid command", champ->line_counter);
+		// p_error("\nERROR! Invalid command.\n");
 	if (ft_strstr(line, ".name"))//ft_strequ(str[0], ".name"))
 		init_name(fd, champ, line);
 	else if (ft_strstr(line, ".comment"))

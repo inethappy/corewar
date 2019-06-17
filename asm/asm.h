@@ -7,12 +7,22 @@
 
 typedef enum	s_types {label, op, reg, dir, indir, dir_l, indir_l} token_type;
 
+typedef struct	s_coding
+{
+	int			op_code;
+	int			args_code;
+	int			arg[3];
+	// int			arg2;
+	// int			arg3;
+}				t_coding;
+
 typedef struct	s_token
 {
 	char		*name;
 	char		arg_type;
 	int			type;
 	int			step;
+	// t_coding	*code;
 }				t_token;
 
 typedef struct	s_all
@@ -24,6 +34,8 @@ typedef struct	s_all
 	int			byte_counter;
 	int			tdir_size_cur;
 	int			file_fd;
+	int			line_counter;
+	t_list		*code;
 }				t_all;
 
 typedef struct	s_op
@@ -44,8 +56,8 @@ t_op			op_tab[17];
 void			save_name(char *name, int fd, t_all *champ);
 int				save_file_name(char *f_name, t_all *champ);
 void			check_name_comment(int fd, char *line, t_all *champ);
-char 			*save_command_data(int fd, char *line, int index);
-char			*find_string_tail(char *str, char *line, int fd);
+char 			*save_command_data(int fd, char *line, int index, t_all *champ);
+char			*find_string_tail(char *str, char *line, int fd, t_all *champ);
 char			*save_end_of_command(char *buf, char *line, char *str);
 int				check_tail(char *line);
 void			init_name(int fd, t_all *champ, char *line);
@@ -57,14 +69,14 @@ char			*ft_one_word_new(const char *s, int *i);
 int				ft_words_counter_new(const char *s);
 t_list			*ft_lstnew_new(void *content, size_t content_size);
 int				is_register(char *token);
-void			add_list(t_list **list, t_token *ptr);
+void			add_list(t_list **list, void *ptr);
 void			del_list(t_token *token, size_t content_size);
 
 // save file
 void			save_inctructions(int fd,t_all *champ);
 
 void			parse_string_save_tokens(char **token, t_all *champ);
-int			 	check_separator(char **token, int i);
+int			 	check_separator(char **token, int i, t_all *champ);
 int				detect_instruction(char *token, t_all *champ);
 int				detect_label(char *token, int *label, t_all *champ);
 
@@ -84,6 +96,7 @@ int				calculate_args(t_list *args);
 void			is_existing_label(char *name, t_list *labels);
 
 void write_in_file(t_all *champ);
+void error_in_line(char *err, int line);
 
 
 #endif

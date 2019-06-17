@@ -1,6 +1,6 @@
 #include "../asm.h"
 
-void add_list(t_list **list, t_token *ptr)
+void add_list(t_list **list, void *ptr)
 {
 	if (!*list)
 		*list = ft_lstnew_new(ptr, sizeof(t_token));
@@ -52,4 +52,14 @@ void	del_list(t_token *token, size_t content_size)
 	content_size = 0;
 	free(token->name);
 	free(token);
+}
+
+void error_in_line(char *err, int line)
+{
+	// printf("%d\n", line);
+	if (line)
+		ft_printf("\n%s in line '%d'\n\n", err, line);
+	else
+		ft_printf("\n%s\n", err);
+	exit(1);
 }
