@@ -18,24 +18,24 @@ void	save_inctructions(int fd,t_all *champ)
 	}
 	// printf("{{%s}}\n", line);
 	if (line == NULL)
-		p_error("\nOOOPS\n");
+		p_error("\nERROR! Unexpected end of input (Forgot a newline?)\n");
 	free(line);
 
-	printf("name [%s]\ncomment [%s]\n", champ->base->prog_name, champ->base->comment);
-	t_list *ll = champ->head;
-	t_list *l = champ->labels;
-	while (l)
-	{
-		t_token *t = l->content;
-		printf("LABEL %10s step %5d type %5d\n", t->name, t->step, t->type);
-		l = l->next;
-	}
-	while (ll)
-	{
-		t_token *tt = ll->content;
-		printf("TOKEN %10s step %5d type %5d arg_type %5d\n", tt->name, tt->step, tt->type, tt->arg_type);
-		ll = ll->next;
-	}
+	// printf("name [%s]\ncomment [%s]\n", champ->base->prog_name, champ->base->comment);
+	// t_list *ll = champ->head;
+	// t_list *l = champ->labels;
+	// while (l)
+	// {
+	// 	t_token *t = l->content;
+	// 	printf("LABEL %10s step %5d type %5d\n", t->name, t->step, t->type);
+	// 	l = l->next;
+	// }
+	// while (ll)
+	// {
+	// 	t_token *tt = ll->content;
+	// 	printf("TOKEN %10s step %5d type %5d arg_type %5d\n", tt->name, tt->step, tt->type, tt->arg_type);
+	// 	ll = ll->next;
+	// }
 }
 
 int check_separator(char **token, int i, t_all *champ)
@@ -49,8 +49,6 @@ int check_separator(char **token, int i, t_all *champ)
 			break ;
 	if (count == 16)
 		error_in_line("ERROR! Invalid operation", champ->line_counter);
-
-		// p_error("\nERROR! Invalid operation.\n");
 	if (op_tab[count].arg_number == 1)
 		return (1);
 	cur = i + 1;
@@ -61,8 +59,6 @@ int check_separator(char **token, int i, t_all *champ)
 		if (!ft_strchr(token[cur], ',') && token[cur + 1]
 			&& token[cur + 1][0] != '#' && token[cur + 1][0] != ',')
 			error_in_line("ERROR! Invalid instruction", champ->line_counter);
-
-			// p_error("\nERROR! Invalid instruction.\n");
 		cur++;
 	}
 	return (1);
@@ -74,8 +70,6 @@ int detect_instruction(char *token, t_all *champ)
 
 	if (ft_strchr(token, ',') && (ft_strchr(token, ',') + 1)[0] == ',')
 		error_in_line("ERROR! Invalid instruction", champ->line_counter);
-
-		// p_error("\nERROR! Invalid instruction.\n");
 	if (ft_strchr(token, ','))// && !ft_strchr((ft_strchr(token, ',') + 1), ','))
 		return (1);
 	if (ft_strchr(token, '%') && (ft_strchr(token, '%') - 1)[0] != ',' && token[0] != '%')
@@ -106,8 +100,6 @@ int detect_label(char *token, int *label, t_all *champ)
 			new = ft_strsplit(token, LABEL_CHAR);
 			if (new[2])
 				error_in_line("ERROR! Invalid label", champ->line_counter);
-
-				// p_error("\nERROR! Invalid label.\n");
 			del_arr(new);
 			new = ft_memalloc(sizeof(char*) * 3);
 			new[0] = ft_strnew(ft_str_len_n(token, ':') + 1);
@@ -115,15 +107,12 @@ int detect_label(char *token, int *label, t_all *champ)
 			new[1] = ft_strdup(token + ft_str_len_n(token, ':') + 1);
 			new[2] = NULL;
 			parse_string_save_tokens(new, champ);
-			// *label += 1;
 			del_arr(new);
 			return (1);
 		}
 		*label += 1;
 		if (*label > 1)
 			error_in_line("ERROR! Invalid label", champ->line_counter);
-		// //
-		// 	p_error("\nERROR! Invalid label.\n");
 		return (1);
 	}
 	// printf("+===++%s\n", token);
@@ -139,13 +128,12 @@ void parse_string_save_tokens(char **token, t_all *champ)
 	label = 0;
 	while (token[i])
 	{
-			// printf("=====%s\n", token[i]);
+			printf("=====%s\n", token[i]);
 		if (token[i][0] == '#')
 			break ;
 		if (token[i][ft_strlen(token[i]) - 1] == ','
 			&& (!token[i + 1] || (token[i + 1][0] == ',')))
 			error_in_line("ERROR! Invalid instruction", champ->line_counter);
-				// p_error("\nERROR! Invalid instruction.\n");
 		if (detect_label(token[i], &label, champ))
 			check_save_label(token[i], champ);
 		else if (detect_instruction(token[i], champ))
@@ -154,7 +142,6 @@ void parse_string_save_tokens(char **token, t_all *champ)
 		{
 			if ((token[i + 1] && token[i + 1][0] == ',') || !check_separator(token, i, champ))
 				error_in_line("ERROR! Invalid instruction", champ->line_counter);
-				// p_error("\nERROR! Invalid instruction.\n");
 			check_save_op(token[i], champ);
 		}
 		i++;

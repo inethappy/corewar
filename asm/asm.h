@@ -7,22 +7,12 @@
 
 typedef enum	s_types {label, op, reg, dir, indir, dir_l, indir_l} token_type;
 
-typedef struct	s_coding
-{
-	int			op_code;
-	int			args_code;
-	int			arg[3];
-	// int			arg2;
-	// int			arg3;
-}				t_coding;
-
 typedef struct	s_token
 {
 	char		*name;
 	char		arg_type;
 	int			type;
 	int			step;
-	// t_coding	*code;
 }				t_token;
 
 typedef struct	s_all

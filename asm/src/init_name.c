@@ -18,7 +18,6 @@ void	init_comment(int fd, t_all *champ, char *line)
 
 	if (champ->base->comment[0] != '\0')
 		error_in_line("ERROR! Invalid command", champ->line_counter);
-		// p_error("\nERROR! Invalid command.\n");
 	buf = save_command_data(fd, line, 7, champ);
 	if (ft_strlen(buf) >  COMMENT_LENGTH)
 		p_error("\nERROR! Too long comment. Max length = 2048\n");
@@ -39,7 +38,6 @@ char *save_end_of_command(char *buf, char *line, char *str)
 	buf[ft_strlen(buf) - 1] = '\n';
 	free(line);
 	line = ft_strjoin(str, buf);
-	// printf("[%s] [%s] {%c} [%s]\n", line, buf, buf[0], str);
 	free(str);
 	free(buf);
 	return (line);
@@ -55,7 +53,6 @@ char *find_string_tail(char *str, char *line, int fd, t_all *champ)
 		champ->line_counter++;
 		if (ft_strchr(line, '"'))
 		{
-			// printf("LLL %s\n", line);
 			line = save_end_of_command(buf, line, str);
 			break ;
 		}
@@ -68,7 +65,6 @@ char *find_string_tail(char *str, char *line, int fd, t_all *champ)
 		}
 		free(line);
 	}
-	// printf("LLL %s\n", line);
 	return (line);
 }
 
@@ -80,8 +76,6 @@ char 	*save_command_data(int fd, char *line, int index, t_all *champ)
 	while (line[++index] != '"')
 		if (line[index] != ' ' && line[index] != '\t')
 			error_in_line("ERROR! Invalid data in command", champ->line_counter);
-
-			// p_error("\nERROR! Invalid data in command line.\n");
 	i = index;
 	while (line[++i] != '"')
 	if (line[i] == '\0')

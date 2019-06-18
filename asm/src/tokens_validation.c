@@ -37,6 +37,8 @@ void	save_args_code(t_list *args, t_all *champ)
 	}
 	// printf("YAYAYAYAYAY%d\n", res);
 	ft_lstadd_end(champ->code, ft_lstnew(&res, 1));
+	champ->base->prog_size++;
+
 	// int *g = champ->code->next->content;
 	// printf("YAYAYAYAYAY%x\n", *g);
 
@@ -69,28 +71,34 @@ void	save_args(t_list *args, int op_nb, t_all *champ, t_token *cur)
 	while (args)
 	{
 		arg = args->content;
-		printf("===%s %d\n", arg->name, arg->type);
 		if (arg->type == 2)
 		{
 			res = ft_atoi(arg->name + 1);
 			ft_lstadd_end(champ->code, ft_lstnew(&res, 1));
+			champ->base->prog_size++;
 		}
 		else if (arg->type == 3)
 		{
 			res = ft_atoi(arg->name);
 			ft_lstadd_end(champ->code, ft_lstnew(&res, tdir));
+			champ->base->prog_size += tdir;
 		}
 		else if (arg->type == 5)
 		{
 			res = find_label(arg, champ->labels, cur);
 			ft_lstadd_end(champ->code, ft_lstnew(&res, tdir));
+			champ->base->prog_size += tdir;
 		}
 		else if (arg->type == 4)
+		{
 			ft_lstadd_end(champ->code, ft_lstnew(arg->name - 48, 4));
+			champ->base->prog_size += 4;
+		}
 		else if (arg->type == 6)
 		{
 			res = find_label(arg, champ->labels, cur);
 			ft_lstadd_end(champ->code, ft_lstnew(&res, 4));
+			champ->base->prog_size += 4;
 		}
 		args = args->next;
 	}
@@ -111,6 +119,7 @@ void	check_arguments(t_list *all, t_token *cur, t_all *champ)
 		champ->code = ft_lstnew(&op_tab[i].code_op, 1);
 	else
 		ft_lstadd_end(champ->code, ft_lstnew(&op_tab[i].code_op, 1));
+	champ->base->prog_size++;
 	all = all->next;
 	while (all)
 	{
@@ -185,8 +194,3 @@ void is_existing_label(char *name, t_list *labels)
 	}
 	p_error("ERROR! Wrong label in operation!\n");
 }
-
-
-
-
-
