@@ -28,14 +28,12 @@ void set_instr_nb(char *instr, t_all *champ)
 	ptr->type = (i == 1) ? dir : indir;
 	ptr->arg_type = (i == 1) ? T_DIR : T_IND;
 	ptr->step = champ->byte_counter;
-	champ->byte_counter += champ->tdir_size_cur;
+	champ->byte_counter += (instr[0] == '%') ? champ->tdir_size_cur : 2;
 	// printf("tututuut %s %d\n", instr, ft_atoi(instr + 1));
 	i += (instr[i] == '-') ? 1 : 0;
 	while (instr[i])
 		if (!ft_isdigit(instr[i++]))
 			error_in_line("ERROR! Invalid instruction", champ->line_counter);
-
-			// p_error("\nERROR! Invalid instrution.\n");
 	ptr->name = (ptr->type == 3) ? ft_strdup(instr + 1) : ft_strdup(instr);
 	add_list(&champ->head, ptr);
 }

@@ -26,8 +26,8 @@ void write_in_file(t_all *champ)
 	i = -1;
 	while (++i < 132)
 		write(champ->file_fd, champ->base->prog_name + i, 1);
-	if (champ->base->prog_size > 682)
-		p_error("\nERROR! Very big executable code! Max = 682.\n");
+	// if (champ->base->prog_size > CHAMP_MAX_SIZE)
+	// 	p_error("\nERROR! Very big executable code! Max = 682.\n"); ??!
 	write_magic_header(all_in, champ->base->prog_size, champ);
 	i = 139;
 	j = -1;
@@ -35,10 +35,14 @@ void write_in_file(t_all *champ)
 		write(champ->file_fd, champ->base->comment + ++j, 1);
 	while (champ->code)
 	{
+		// int *k = champ->code->content;
 		j = champ->code->content_size;
+		// printf("[%d]\n", *k);
 		while (j-- > 0)
 			write(champ->file_fd, champ->code->content + j, 1);
 		champ->code = champ->code->next;
 	}
+	// int g = -4;
+	// write(champ->file_fd, &g, 2);
 	printf("----------%d\n", champ->base->prog_size);
 }

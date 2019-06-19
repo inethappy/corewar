@@ -3,22 +3,26 @@
 void save_name(char *name, int fd, t_all *champ)
 {
 	char *line;
+	int		count;
 
+	count = 0;
 	if (!save_file_name(name, champ))
 		p_error("\nERROR! Wrong file extension: only *.s please.\n");
 	while (get_next_line(fd, &line) >= 0)
 	{
 		printf("%s\n", line);
 		champ->line_counter++;
-		if (line[0] == '.')
+		if (line[0] == '.' && ++count)
 			check_name_comment(fd, line, champ);
-		if (!ft_strchr(line, '"') && line[0] != '#' && line[0] != ';' && line[0] != '\0') //добавила >= 0 из-за пустой строки после коммента перед именем
+		if (!ft_strchr(line, '"') && line[0] != '#' && line[0] != ';' && ((line[0] != '\0' && count < 2))) //добавила >= 0 из-за пустой строки после коммента перед именем
 			break ;
+		if (count > 1)
+		 	break ;
 		free(line);
 	}
 	free(line);
-	// if (champ->base->prog_name[0] == '\0' || champ->base->comment[0] == '\0')
-	// 	p_error("\nERROR! Name and comment of champion are needed.\n"); !!!: "" case
+	if (count < 2)
+		p_error("\nERROR! Name and comment of champion are needed.\n"); //!!!: "" case
 }
 
 int save_file_name(char *f_name, t_all *champ)

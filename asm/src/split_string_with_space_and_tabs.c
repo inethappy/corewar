@@ -7,7 +7,7 @@ int	ft_words_counter_new(const char *s)
 
 	if (!s || *s == '\0')
 		return (0);
-	i = 0;
+	i = 1;
 	word = 0;
 	if (s[0] != ' ' && s[0] != '\t')
 		word++;

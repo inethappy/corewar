@@ -10,7 +10,12 @@ void	save_inctructions(int fd,t_all *champ)
 		champ->line_counter++;
 		token = ft_strsplit_new(line);
 		if (token)
+		// {
+		// 	int y = -1;
+		// 	while (token[++y])
+		// 		printf("%d---%s---\n", y, token[y]);
 			parse_string_save_tokens(token, champ);
+		// }
 		else
 			check_save_label(line, champ);
 		free(line);
@@ -21,21 +26,21 @@ void	save_inctructions(int fd,t_all *champ)
 		p_error("\nERROR! Unexpected end of input (Forgot a newline?)\n");
 	free(line);
 
-	// printf("name [%s]\ncomment [%s]\n", champ->base->prog_name, champ->base->comment);
-	// t_list *ll = champ->head;
-	// t_list *l = champ->labels;
-	// while (l)
-	// {
-	// 	t_token *t = l->content;
-	// 	printf("LABEL %10s step %5d type %5d\n", t->name, t->step, t->type);
-	// 	l = l->next;
-	// }
-	// while (ll)
-	// {
-	// 	t_token *tt = ll->content;
-	// 	printf("TOKEN %10s step %5d type %5d arg_type %5d\n", tt->name, tt->step, tt->type, tt->arg_type);
-	// 	ll = ll->next;
-	// }
+	printf("name [%s]\ncomment [%s]\n", champ->base->prog_name, champ->base->comment);
+	t_list *ll = champ->head;
+	t_list *l = champ->labels;
+	while (l)
+	{
+		t_token *t = l->content;
+		printf("LABEL %10s step %5d type %5d\n", t->name, t->step, t->type);
+		l = l->next;
+	}
+	while (ll)
+	{
+		t_token *tt = ll->content;
+		printf("TOKEN %10s step %5d type %5d arg_type %5d\n", tt->name, tt->step, tt->type, tt->arg_type);
+		ll = ll->next;
+	}
 }
 
 int check_separator(char **token, int i, t_all *champ)
@@ -54,10 +59,10 @@ int check_separator(char **token, int i, t_all *champ)
 	cur = i + 1;
 	while (token[cur])
 	{
-		if (token[cur][0] == '#')
+		if (token[cur][0] == '#' || token[cur][0] == ';')
 			break ;
 		if (!ft_strchr(token[cur], ',') && token[cur + 1]
-			&& token[cur + 1][0] != '#' && token[cur + 1][0] != ',')
+			&& token[cur + 1][0] != '#' && token[cur + 1][0] != ';' && token[cur + 1][0] != ',')
 			error_in_line("ERROR! Invalid instruction", champ->line_counter);
 		cur++;
 	}
@@ -84,7 +89,7 @@ int detect_instruction(char *token, t_all *champ)
 		return (1);
 	}
 	else if (ft_strchr(token, '%') || is_register(token)
-		|| ft_isdigit(token[0]) || token[0] == '-')
+		|| ft_isdigit(token[0]) || token[0] == '-' || token[0] == ':') //add  token[0] == ':' for indir
 		return (1);
 	return (0);
 }
@@ -92,8 +97,9 @@ int detect_instruction(char *token, t_all *champ)
 int detect_label(char *token, int *label, t_all *champ)
 {
 	char **new;
+	// printf("+===++%s\n", token);
 
-	if (ft_strchr(token, LABEL_CHAR) && *(ft_strchr(token, LABEL_CHAR) - 1) != '%' && token[0] != ':')
+	if (!ft_strchr(token, SEPARATOR_CHAR) && ft_strchr(token, LABEL_CHAR) && *(ft_strchr(token, LABEL_CHAR) - 1) != '%' && token[0] != ':')
 	{
 		if (*(ft_strchr(token, LABEL_CHAR) + 1))
 		{
@@ -115,7 +121,6 @@ int detect_label(char *token, int *label, t_all *champ)
 			error_in_line("ERROR! Invalid label", champ->line_counter);
 		return (1);
 	}
-	// printf("+===++%s\n", token);
 	return (0);
 }
 
@@ -128,8 +133,8 @@ void parse_string_save_tokens(char **token, t_all *champ)
 	label = 0;
 	while (token[i])
 	{
-			printf("=====%s\n", token[i]);
-		if (token[i][0] == '#')
+		printf("=====[%s]\n", token[i]);
+		if (token[i][0] == COMMENT_CHAR || token[i][0] == ALT_COMMENT_CHAR)
 			break ;
 		if (token[i][ft_strlen(token[i]) - 1] == ','
 			&& (!token[i + 1] || (token[i + 1][0] == ',')))

@@ -53,7 +53,7 @@ int find_label(t_token *arg, t_list *lbls, t_token *cur)// t_all *champ)
 		token = lbls->content;
 		if (ft_strequ(token->name, arg->name))
 		{
-			printf("[%s] [%s] [%s], [%d] [%d]\n", cur->name, token->name, arg->name, token->step, cur->step);
+			// printf("[%s] [%s] [%s], [%d] [%d]\n", cur->name, token->name, arg->name, token->step, cur->step);
 			return (token->step - cur->step);
 		}
 		lbls = lbls->next;
@@ -91,14 +91,15 @@ void	save_args(t_list *args, int op_nb, t_all *champ, t_token *cur)
 		}
 		else if (arg->type == 4)
 		{
-			ft_lstadd_end(champ->code, ft_lstnew(arg->name - 48, 4));
-			champ->base->prog_size += 4;
+			res = ft_atoi(arg->name);
+			ft_lstadd_end(champ->code, ft_lstnew(&res, 2));
+			champ->base->prog_size += 2;
 		}
 		else if (arg->type == 6)
 		{
 			res = find_label(arg, champ->labels, cur);
-			ft_lstadd_end(champ->code, ft_lstnew(&res, 4));
-			champ->base->prog_size += 4;
+			ft_lstadd_end(champ->code, ft_lstnew(&res, 2));
+			champ->base->prog_size += 2;
 		}
 		args = args->next;
 	}
