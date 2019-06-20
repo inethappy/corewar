@@ -10,11 +10,11 @@ void set_instr_label(char *instr, t_all *champ, int i)
 	ptr->type = (i == 2) ? dir_l : indir_l;
 	ptr->arg_type = (i == 2) ? T_DIR : T_IND;
 	ptr->name = (i == 2) ? ft_strdup(instr + 2) : ft_strdup(instr + 1);
+	if (instr[i] == '\0')
+			error_in_line("ERROR! Invalid instruction", champ->line_counter);
 	while (instr[i])
 		if (!ft_strchr(LABEL_CHARS, instr[i++]))
 			error_in_line("ERROR! Invalid instruction", champ->line_counter);
-
-			// p_error("\nERROR! Invalid instrution.\n");
 	add_list(&champ->head, ptr);
 }
 
@@ -31,6 +31,8 @@ void set_instr_nb(char *instr, t_all *champ)
 	champ->byte_counter += (instr[0] == '%') ? champ->tdir_size_cur : 2;
 	// printf("tututuut %s %d\n", instr, ft_atoi(instr + 1));
 	i += (instr[i] == '-') ? 1 : 0;
+	if (instr[i] == '\0')
+			error_in_line("ERROR! Invalid instruction", champ->line_counter);
 	while (instr[i])
 		if (!ft_isdigit(instr[i++]))
 			error_in_line("ERROR! Invalid instruction", champ->line_counter);

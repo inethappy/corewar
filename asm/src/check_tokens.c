@@ -8,7 +8,7 @@ void	check_save_instr(char **arg, t_all *champ)
 	while (arg[i])
 	{
 		printf("tutb {%s}\n", arg[i]);
-		if (arg[i][0] == '\0' || (ft_strchr(arg[i], '%') && arg[i][0] != '%'))
+		if (arg[i][0] == '\0' || (ft_strchr(arg[i], '%') && arg[i][0] != '%') || (ft_strchr(arg[i], '-') && arg[i][0] != '-'))
 		{
 			del_arr(arg);
 			return ; // for split ":%live:ld & etc"
@@ -67,8 +67,8 @@ void	check_save_op(char *instr, t_all *champ)
 	while (++i < 16)
 		if (ft_strequ(instr, op_tab[i].name))
 			break ;
-	// if (i == 16)
-	// 	error_in_line("ERROR! Invalid operation", champ->line_counter);
+	if (i == 16)
+		error_in_line("ERROR! Invalid operation", champ->line_counter);
 	ptr = ft_memalloc(sizeof(t_token));
 	ptr->name = ft_strdup(instr);
 	ptr->type = op;

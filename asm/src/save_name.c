@@ -10,7 +10,7 @@ void save_name(char *name, int fd, t_all *champ)
 		p_error("\nERROR! Wrong file extension: only *.s please.\n");
 	while (get_next_line(fd, &line) >= 0)
 	{
-		printf("%s\n", line);
+		// printf("%s\n", line);
 		champ->line_counter++;
 		if (line[0] == '.' && ++count)
 			check_name_comment(fd, line, champ);

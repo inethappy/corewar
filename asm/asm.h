@@ -66,6 +66,7 @@ void			del_list(t_token *token, size_t content_size);
 void			save_inctructions(int fd,t_all *champ);
 
 void			parse_string_save_tokens(char **token, t_all *champ);
+void parse_string_save_tokens_split(char **token, t_all *champ);
 int			 	check_separator(char **token, int i, t_all *champ);
 int				detect_instruction(char *token, t_all *champ);
 int				detect_label(char *token, int *label, t_all *champ);

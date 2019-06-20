@@ -22,8 +22,9 @@ int     is_register(char *token)
 		else if (token[i] == COMMENT_CHAR || token[i] == ALT_COMMENT_CHAR)
 			break ;
 		i++;
+		return (1);
 	}
-	return (1);
+	return (0);
 }
 
 t_list  *ft_lstnew_new(void *content, size_t content_size)

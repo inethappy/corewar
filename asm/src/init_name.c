@@ -35,7 +35,6 @@ char *save_end_of_command(char *buf, char *line, char *str)
 	check_tail(line + i + 1);
 	buf = ft_strnew(i + 1);
 	ft_strncpy(buf, line, i);
-	buf[ft_strlen(buf) - 1] = '\n';
 	free(line);
 	line = ft_strjoin(str, buf);
 	free(str);
@@ -58,7 +57,7 @@ char *find_string_tail(char *str, char *line, int fd, t_all *champ)
 		}
 		else
 		{
-			buf = ft_strjoin(str, line);
+			buf = ft_strjoin(str, ft_strjoin(line, "\n")); // leaks?
 			free(str);
 			str = ft_strdup(buf);
 			free(buf);
