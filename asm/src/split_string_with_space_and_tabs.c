@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   split_string_with_space_and_tabs.c                 :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mkotytsk <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/06/21 16:51:17 by mkotytsk          #+#    #+#             */
+/*   Updated: 2019/06/21 16:51:19 by mkotytsk         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../asm.h"
 
-int	ft_words_counter_new(const char *s)
+int		ft_words_counter_new(const char *s)
 {
 	int i;
 	int word;
@@ -13,7 +25,8 @@ int	ft_words_counter_new(const char *s)
 		word++;
 	while (s[i] != '\0')
 	{
-		if ((s[i] != ' ' && s[i] != '\t') && (s[i - 1] == ' ' || s[i - 1] == '\t'))
+		if ((s[i] != ' ' && s[i] != '\t')
+			&& (s[i - 1] == ' ' || s[i - 1] == '\t'))
 			word++;
 		i++;
 	}

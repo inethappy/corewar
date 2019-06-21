@@ -15,7 +15,9 @@ SOURCES		:=	main.c \
 				parse_tokens.c \
 				check_tokens.c \
 				tokens_validation.c \
-				create_file.c
+				args_validation.c \
+				create_file.c \
+				detection_tokens.c
 
 OBJECTS		:= $(addprefix $(OBJECTS_DIR), $(SOURCES:.c=.o))
 

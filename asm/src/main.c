@@ -1,5 +1,4 @@
 #include "../asm.h"
-// ../vm_champs/asm ../vm_champs/champs/toto_test.s && xxd ../vm_champs/champs/toto_test.cor > ../asm/car.bt
 
 int		main(int argc, char **argv)
 {

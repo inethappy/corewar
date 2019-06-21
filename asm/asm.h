@@ -66,7 +66,7 @@ void			del_list(t_token *token, size_t content_size);
 void			save_inctructions(int fd,t_all *champ);
 
 void			parse_string_save_tokens(char **token, t_all *champ);
-void parse_string_save_tokens_split(char **token, t_all *champ);
+void			parse_string_save_tokens_split(char **token, t_all *champ);
 int			 	check_separator(char **token, int i, t_all *champ);
 int				detect_instruction(char *token, t_all *champ);
 int				detect_label(char *token, int *label, t_all *champ);
@@ -85,9 +85,13 @@ void			check_arguments(t_list *all, t_token *cur, t_all *champ);
 void			is_correct_args(t_list *args, int op_nb, t_all *champ);
 int				calculate_args(t_list *args);
 void			is_existing_label(char *name, t_list *labels);
+int				find_cur_operation(t_token *cur);
+void			save_args(t_list *args, int op_nb, t_all *champ, t_token *cur);
+int				find_label(t_token *arg, t_list *lbls, t_token *cur);
+void			save_args_code(t_list *args, t_all *champ);
 
-void write_in_file(t_all *champ);
-void error_in_line(char *err, int line);
+void			write_in_file(t_all *champ);
+void			error_in_line(char *err, int line);
 
 
 #endif

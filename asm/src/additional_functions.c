@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   additional_functions.c                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mkotytsk <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/06/21 15:42:01 by mkotytsk          #+#    #+#             */
+/*   Updated: 2019/06/21 15:42:03 by mkotytsk         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../asm.h"
 
-void add_list(t_list **list, void *ptr)
+void	add_list(t_list **list, void *ptr)
 {
 	if (!*list)
 		*list = ft_lstnew_new(ptr, sizeof(t_token));
@@ -8,11 +20,12 @@ void add_list(t_list **list, void *ptr)
 		ft_lstadd_end(*list, ft_lstnew_new(ptr, sizeof(t_token)));
 }
 
-int     is_register(char *token)
+int		is_register(char *token)
 {
 	int	i;
 
-	if (token[0] != 'r' || !(ft_atoi(token + 1) >= 0 && ft_atoi(token + 1) < 100))
+	if (token[0] != 'r' || !(ft_atoi(token + 1) >= 0
+		&& ft_atoi(token + 1) < 100))
 		return (0);
 	i = 1;
 	while (token[i])
@@ -27,7 +40,7 @@ int     is_register(char *token)
 	return (0);
 }
 
-t_list  *ft_lstnew_new(void *content, size_t content_size)
+t_list	*ft_lstnew_new(void *content, size_t content_size)
 {
 	t_list	*new;
 
@@ -55,9 +68,8 @@ void	del_list(t_token *token, size_t content_size)
 	free(token);
 }
 
-void error_in_line(char *err, int line)
+void	error_in_line(char *err, int line)
 {
-	// printf("%d\n", line);
 	if (line)
 		ft_printf("\n%s in line '%d'\n\n", err, line);
 	else
