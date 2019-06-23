@@ -12,6 +12,19 @@
 
 #include "../asm.h"
 
+void	del_args_list(t_list *args)
+{
+	t_list *r;
+
+	while (args)
+	{
+		r = args->next;
+		del_list(args->content, args->content_size);
+		free(args);
+		args = r;
+	}
+}
+
 void	check_arguments(t_list *all, t_token *cur, t_all *champ)
 {
 	int			i;
@@ -19,11 +32,11 @@ void	check_arguments(t_list *all, t_token *cur, t_all *champ)
 	t_list		*args;
 
 	args = NULL;
-	i = find_cur_operation(cur);
+	i = find_cur_operation(cur->name);
 	if (!champ->code)
-		champ->code = ft_lstnew(&op_tab[i].code_op, 1);
+		champ->code = ft_lstnew_new(&op_tab[i].code_op, 1);
 	else
-		ft_lstadd_end(champ->code, ft_lstnew(&op_tab[i].code_op, 1));
+		ft_lstadd_end(champ->code, ft_lstnew_new(&op_tab[i].code_op, 1));
 	champ->base->prog_size++;
 	all = all->next;
 	while (all)
@@ -38,6 +51,7 @@ void	check_arguments(t_list *all, t_token *cur, t_all *champ)
 	if (op_tab[i].arg_size)
 		save_args_code(args, champ);
 	save_args(args, i, champ, cur);
+	del_args_list(args);
 }
 
 void	is_correct_args(t_list *args, int op_nb, t_all *champ)

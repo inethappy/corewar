@@ -91,3 +91,18 @@ void	check_save_op(char *instr, t_all *champ)
 	champ->byte_counter += (op_tab[i].arg_size == 1) ? 2 : 1;
 	add_list(&champ->head, ptr);
 }
+
+int		wrong_line(char **token, int i, t_all *champ)
+{
+	if (token[i][0] == SEPARATOR_CHAR && !token[i][1]
+		&& token[i + 1] && (token[i + 1][0] == COMMENT_CHAR
+		|| token[i + 1][0] == ALT_COMMENT_CHAR))
+		return (1);
+	if (token[i][0] == COMMENT_CHAR || token[i][0] == ALT_COMMENT_CHAR)
+		return (0);
+	if ((token[i][ft_strlen(token[i]) - 1] == ',' && (!token[i + 1]
+			|| (token[i + 1][0] == ',')))
+			|| (token[i][0] == ':' && !champ->head))
+		return (1);
+	return (0);
+}

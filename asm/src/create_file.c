@@ -27,7 +27,7 @@ void	write_magic_header(char *all_in, int input, t_all *champ)
 	write(champ->file_fd, all_in, 4);
 }
 
-void	write_in_file(t_all *champ)
+void	write_in_file(t_all *champ, t_list *code)
 {
 	char	*all_in;
 	int		i;
@@ -43,11 +43,12 @@ void	write_in_file(t_all *champ)
 	j = -1;
 	while (++i < 2192)
 		write(champ->file_fd, champ->base->comment + ++j, 1);
-	while (champ->code)
+	while (code)
 	{
-		j = champ->code->content_size;
+		j = code->content_size;
 		while (j-- > 0)
-			write(champ->file_fd, champ->code->content + j, 1);
-		champ->code = champ->code->next;
+			write(champ->file_fd, code->content + j, 1);
+		code = code->next;
 	}
+	free(all_in);
 }

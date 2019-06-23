@@ -92,13 +92,13 @@ void	save_args(t_list *args, int op_nb, t_all *champ, t_token *cur)
 	}
 }
 
-int		find_cur_operation(t_token *cur)
+int		find_cur_operation(char *name)
 {
 	int	i;
 
 	i = -1;
 	while (++i < 16)
-		if (ft_strequ(cur->name, op_tab[i].name))
+		if (ft_strequ(name, op_tab[i].name))
 			break ;
 	return (i);
 }

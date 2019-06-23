@@ -183,5 +183,5 @@ deb:	fork %12
 	ld %0x08030003,r0
 	live %1
 	st r0,4
-	
+
 

@@ -50,7 +50,6 @@ char	*save_end_of_command(char *buf, char *line, char *str)
 	ft_strncpy(buf, line, i);
 	free(line);
 	line = ft_strjoin(str, buf);
-	free(str);
 	free(buf);
 	return (line);
 }
@@ -70,7 +69,7 @@ char	*find_string_tail(char *str, char *line, int fd, t_all *champ)
 		}
 		else
 		{
-			buf = ft_strjoin(str, ft_strjoin(line, "\n")); // leaks?
+			buf = ft_strjoin(str, ft_strjoin(line, "\n"));
 			free(str);
 			str = ft_strdup(buf);
 			free(buf);
@@ -95,7 +94,7 @@ char	*save_command_data(int fd, char *line, int index, t_all *champ)
 		{
 			buf = ft_strjoin(ft_strdup(line + index + 1), "\n");
 			str = find_string_tail(buf, line, fd, champ);
-			free(buf); //??
+			free(buf);
 			if (str)
 				return (str);
 		}
